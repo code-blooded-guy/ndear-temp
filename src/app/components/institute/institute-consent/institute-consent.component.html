@@ -1,0 +1,35 @@
+<app-header [headerFor]='header1' [tab]='tab'></app-header>
+<div class="container">
+  <h6 class="d-inline-block">Consents</h6>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Date of Request</th>
+        <th scope="col">Consent Request from</th>
+        <th scope="col"></th>
+       
+      </tr>
+    </thead>
+    <tbody>
+      <ng-template ngFor let-item [ngForOf]="consent" let-i="index">
+        <tr *ngIf="!item.granted">
+          <td>{{currentDate | date:'dd-MM-yyyy'}}</td>
+          <td>{{item.mobileEmail}}</td>
+          <td><button style="margin: 8px;" class="btn btn-primary text-end pr-20 fw-bold text-capitalize" (click)="onConsentApprove(true, i)"><i class="fa fa-check-circle text-success" data-mdb-toggle="tooltip" title="Attested"></i>Grant</button>
+            <button style="margin: 8px;" class="btn btn-primary text-end fw-bold pr-20 text-capitalize" (click)="onConsentApprove(false, i)"><i
+                class="fa fa-exclamation-circle red" ></i>Deny</button>
+        </td>
+        </tr>
+      </ng-template>
+    </tbody>
+  </table>
+  <table class="mx-5 my-5 w-50">
+    <tbody class="fs-5">
+        <tr *ngIf="!consent?.length">
+          <td class="float-end" [attr.colspan]="consent?.length">
+            No Records Found!
+          </td>
+        </tr>
+      </tbody>
+  </table>
+</div>

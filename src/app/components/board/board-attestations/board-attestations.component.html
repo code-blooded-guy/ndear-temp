@@ -1,0 +1,25 @@
+<app-header [headerFor]='header1' [tab]='tab'></app-header>
+<div class="container">
+  <h6 class="d-inline-block">Affiliation Attestation</h6>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Submitted Date</th>
+        <th scope="col">Name</th>
+        <th scope="col">Affiliation Number</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- <ng-template ngFor let-item [ngForOf]="affiliations" let-i="index"> -->
+        <tr *ngIf="affiliations.attested == 'pending'">
+          <td>{{currentDate | date:'dd-MM-yyyy'}}</td>
+          <td>{{institute.BasicDetails.instituteName}}</td>
+          <td>{{affiliations.affiliationNumber}}</td>
+          <td><a [routerLink]="['/board-attestation-detail']"
+              class="btn btn-primary text-end fw-bold text-capitalize">Attest</a></td>
+        </tr>
+      <!-- </ng-template> -->
+    </tbody>
+  </table>
+  <hr>
+</div>
