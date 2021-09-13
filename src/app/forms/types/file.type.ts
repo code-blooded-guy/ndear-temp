@@ -35,8 +35,7 @@ import { DomSanitizer } from '@angular/platform-browser';
     </div>
     </div>
     <div *ngFor="let file of selectedFiles; let i = index">
-        <div style="margin-top: 22px; margin-bottom: -30px;">{{ file.name }}</div>
-        <br>
+        <span class="badge badge-pill badge-primary"><i class="fa fa-paperclip" aria-hidden="true"></i> {{ file.name }}</span>
       </div>
     `,
 })

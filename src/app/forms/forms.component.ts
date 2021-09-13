@@ -595,35 +595,67 @@ export class FormsComponent implements OnInit {
   submit() {
     if(this.fileFields.length > 0){
       this.fileFields.forEach(fileField => {
-        var formData = new FormData();
-        // this.model[fileField].forEach(file  => {
-        //   // this.fileName = file.name;
-        //   formData.append("files", file);
-        // });
-        console.log("Model -- ",this.model[fileField]);
-        for (let i = 0; i < this.model[fileField].length; i++) {
-          const file = this.model[fileField][i]
-          formData.append("files", file);
-        }
-        
-        if (this.type && this.type.includes("property")) {
-          var property = this.type.split(":")[1];
-        }
-        var url = [this.apiUrl, this.identifier, property, 'documents']
-        this.generalService.postData(url.join('/'), formData).subscribe((res) => {
-          console.log('res', res);
-          var documents_list: any[] = [];
-          var documents_obj = {
-            "fileName": "",
-            "format": "file"
+        if(this.model[fileField]){
+          var formData = new FormData();
+          console.log("Model -- ",this.model[fileField]);
+          for (let i = 0; i < this.model[fileField].length; i++) {
+            const file = this.model[fileField][i]
+            formData.append("files", file);
           }
-          res.documentLocations.forEach(element => {
-            documents_obj.fileName = element;
-            documents_list.push(documents_obj);
-          });
           
-          this.model[fileField] = documents_list;
-          console.log('documents', JSON.stringify(this.model[fileField]));
+          if (this.type && this.type.includes("property")) {
+            var property = this.type.split(":")[1];
+          }
+          var url = [this.apiUrl, this.identifier, property, 'documents']
+          this.generalService.postData(url.join('/'), formData).subscribe((res) => {
+            console.log('res', res);
+            var documents_list: any[] = [];
+            var documents_obj = {
+              "fileName": "",
+              "format": "file"
+            }
+            res.documentLocations.forEach(element => {
+              documents_obj.fileName = element;
+              documents_list.push(documents_obj);
+            });
+            
+            this.model[fileField] = documents_list;
+            console.log('documents', JSON.stringify(this.model[fileField]));
+            if (this.type && this.type === 'entity') {
+              this.customFields.forEach(element => {
+                delete this.model[element];
+              });
+              if (this.identifier != null) {
+                this.updateData()
+              } else {
+                this.postData()
+              }
+              // this.getData()
+            }
+            else if (this.type && this.type.includes("property")) {
+              var property = this.type.split(":")[1];
+              var url = [this.apiUrl, this.identifier, property];
+              this.apiUrl = (url.join("/"));
+              if (this.model[property]) {
+                this.model = this.model[property];
+              }
+              if (this.model.hasOwnProperty('attest') && this.model['attest']) {
+                this.apiUrl = (url.join("/")) + '?send=true';
+              } else {
+                this.apiUrl = (url.join("/")) + '?send=false';
+              }
+              this.customFields.forEach(element => {
+                delete this.model[element];
+              });
+              this.postData()
+              // this.getData()
+            }
+          }, (err) => {
+            console.log(err);
+            this.toastMsg.error('error', 'Something went wrong while uploading files, please try again')
+          });
+        }
+        else{
           if (this.type && this.type === 'entity') {
             this.customFields.forEach(element => {
               delete this.model[element];
@@ -653,10 +685,7 @@ export class FormsComponent implements OnInit {
             this.postData()
             // this.getData()
           }
-        }, (err) => {
-          console.log(err);
-          this.toastMsg.error('error', 'Something went wrong while uploading files, please try again')
-        });
+        }
       });
     }
     else{

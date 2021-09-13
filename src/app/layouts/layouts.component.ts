@@ -94,7 +94,8 @@ export class LayoutsComponent implements OnInit {
                     if ('$ref' in this.responseData['definitions'][block.definition]['properties'][element]) {
                       var ref_defination = (this.responseData['definitions'][block.definition]['properties'][element]['$ref']).split('/').pop()
                       temp_object = this.responseData['definitions'][ref_defination]['properties'][key]
-                      if (temp_object != undefined) {
+                      
+                      if (temp_object != undefined && typeof value != 'object') {
                         temp_object['value'] = value
                         this.property.push(temp_object)
                       }
@@ -102,7 +103,8 @@ export class LayoutsComponent implements OnInit {
                     else {
                       if (this.responseData['definitions'][block.definition]['properties'][element]['properties'] != undefined) {
                         temp_object = this.responseData['definitions'][block.definition]['properties'][element]['properties'][key]
-                        if (temp_object != undefined) {
+                        
+                        if (temp_object != undefined  && typeof value != 'object') {
                           temp_object['value'] = value
                           this.property.push(temp_object)
                         }
@@ -127,14 +129,14 @@ export class LayoutsComponent implements OnInit {
                       if ('$ref' in this.responseData['definitions'][block.definition]['properties'][element]) {
                         var ref_defination = (this.responseData['definitions'][block.definition]['properties'][element]['$ref']).split('/').pop()
                         temp_object = this.responseData['definitions'][ref_defination]['properties'][key]
-                        if (temp_object != undefined) {
+                        if (temp_object != undefined  && typeof value != 'object') {
                           temp_object['value'] = value;
                           this.property.push(temp_object);
                         }
                       }
                       else {
                         temp_object = this.responseData['definitions'][block.definition]['properties'][element]['items']['properties'][key];
-                        if (temp_object != undefined) {
+                        if (temp_object != undefined  && typeof value != 'object') {
                           temp_object['value'] = value;
                           this.property.push(temp_object);
                         }
@@ -154,7 +156,7 @@ export class LayoutsComponent implements OnInit {
                   if ('$ref' in this.responseData['definitions'][block.definition]['properties'][element]) {
                     var ref_defination = (this.responseData['definitions'][block.definition]['properties'][element]['$ref']).split('/').pop()
                     temp_object = this.responseData['definitions'][ref_defination]['properties'][key]
-                    if (temp_object != undefined) {
+                    if (temp_object != undefined  && typeof value != 'object') {
                       if (element.osid) {
                         temp_object['osid'] = element.osid
                       }
@@ -172,7 +174,7 @@ export class LayoutsComponent implements OnInit {
                   }
                   else {
                     temp_object = this.responseData['definitions'][block.definition]['properties'][element]['properties'][key];
-                    if (temp_object != undefined) {
+                    if (temp_object != undefined  && typeof value != 'object') {
                       if (element.osid) {
                         temp_object['osid'] = element.osid;
                       }
@@ -198,7 +200,7 @@ export class LayoutsComponent implements OnInit {
                     if ('$ref' in this.responseData['definitions'][block.definition]['properties'][element]) {
                       var ref_defination = (this.responseData['definitions'][block.definition]['properties'][element]['$ref']).split('/').pop()
                       temp_object = this.responseData['definitions'][ref_defination]['properties'][key]
-                      if (temp_object != undefined) {
+                      if (temp_object != undefined  && typeof value != 'object') {
                         if (objects.osid) {
                           temp_object['osid'] = objects.osid;
                         }
@@ -211,7 +213,7 @@ export class LayoutsComponent implements OnInit {
                     }
                     else {
                       temp_object = this.responseData['definitions'][block.definition]['properties'][element]['items']['properties'][key];
-                      if (temp_object != undefined) {
+                      if (temp_object != undefined  && typeof value != 'object') {
                         if (objects.osid) {
                           temp_object['osid'] = objects.osid;
                         }
@@ -242,6 +244,7 @@ export class LayoutsComponent implements OnInit {
       }
       block.items.push(this.property)
       this.Data.push(block)
+      console.log("main",this.Data)
     });
   }
 
