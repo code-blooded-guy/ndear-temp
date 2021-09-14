@@ -105,7 +105,7 @@ export class FormsComponent implements OnInit {
       this.schemaService.getSchemas().subscribe((res) => {
         this.responseData = res;
         this.formSchema.fieldsets.forEach(fieldset => {
-
+          console.log('fieldset',fieldset)
           if (fieldset.hasOwnProperty('globalPrivacyConfig') && fieldset.globalPrivacyConfig != '') {
             this.globalPrivacy = fieldset.globalPrivacyConfig;
           } else
@@ -160,6 +160,7 @@ export class FormsComponent implements OnInit {
         this.schema["properties"] = this.property;
         this.schema["required"] = this.required;
         this.schema["dependencies"] = this.dependencies;
+        console.log("Schema: " + JSON.stringify(this.schema));
         this.loadSchema();
       },
         (error) => {
@@ -351,7 +352,8 @@ export class FormsComponent implements OnInit {
             "templateOptions": {
             },
             "validation": {},
-            "expressionProperties": {}
+            "expressionProperties": {},
+            "modelOptions":{}
           }
 
         }
@@ -428,6 +430,7 @@ export class FormsComponent implements OnInit {
         }
       }
       if (field.autofill) {
+        console.log('f',field.name)
         if (field.autofill.apiURL) {
           this.responseData.definitions[fieldset.definition].properties[field.name]['widget']['formlyConfig']['modelOptions'] = {
             updateOn: 'blur'

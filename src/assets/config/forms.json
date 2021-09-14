@@ -414,7 +414,7 @@
                         "privacyConfig": "AffiliationOsConfig",
                         "fields": [
                             {
-                                "name": "institute",
+                                "name": "instituteName",
                                 "required": true,
                                 "type": "autocomplete",
                                 "api": "/Institute/search",
@@ -425,7 +425,7 @@
                                     "method": "POST",
                                     "body": {
                                                 "filters": {
-                                                    "osid": {
+                                                    "instituteName": {
                                                         "contains": "{{value}}"
                                                     }
                                                 },
