@@ -166,29 +166,33 @@ export class FormDetailComponent implements OnInit {
         console.log("documents", this.documents)
       }
       else{
-        if(Array.isArray(value)){
-          value.forEach(element => {
-            for (const [index2, [key2, value2]] of Object.entries(Object.entries(element))) {
-              var temp_object2 = {};
-              temp_object2['title'] = (key2).charAt(0).toUpperCase() + key2.slice(1);
-              temp_object2['value'] = value2;
-              this.propertyData.push(temp_object2);
-            }
-          });
+        // if(Array.isArray(value)){
+        //   value.forEach(element => {
+        //     for (const [index2, [key2, value2]] of Object.entries(Object.entries(element))) {
+        //       var temp_object2 = {};
+        //       temp_object2['title'] = (key2).charAt(0).toUpperCase() + key2.slice(1);
+        //       temp_object2['value'] = value2;
+        //       this.propertyData.push(temp_object2);
+        //     }
+        //   });
           
-        }else{
-          var temp_object = {};
+        // }else{
+        //   var temp_object = {};
+        //   temp_object['title'] = (key).charAt(0).toUpperCase() + key.slice(1);
+        //   temp_object['value'] = value;
+        //   this.propertyData.push(temp_object);
+        // }
+        var temp_object = {};
           temp_object['title'] = (key).charAt(0).toUpperCase() + key.slice(1);
           temp_object['value'] = value;
           this.propertyData.push(temp_object);
-        }
       }
     }
     console.log("propertyData",this.propertyData)
   }
 
   removeCommonFields() {
-    var commonFields = ['osCreatedAt', 'osCreatedBy', 'osUpdatedAt', 'osUpdatedBy','_osAttestedData', 'osid','_osClaimId','_osState','Osid'];
+    var commonFields = ['osCreatedAt', 'osCreatedBy', 'osUpdatedAt', 'osUpdatedBy','OsUpdatedBy','_osAttestedData', 'osid','_osClaimId','_osState','Osid'];
     commonFields.forEach(element => {
       if(this.attestationData[element]){
         delete this.attestationData[element]

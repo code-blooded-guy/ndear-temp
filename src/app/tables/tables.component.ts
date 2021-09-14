@@ -73,13 +73,14 @@ export class TablesComponent implements OnInit {
     console.log("model", this.model)
 
     var temp_array;
+    let temp_object
     this.model.forEach(element => {
       if (element.status === "OPEN") {
         temp_array = [];
         this.tableSchema.fields.forEach((field) => {
           // console.log("field",element[field.name])
 
-          var temp_object = field;
+          temp_object = field;
           if (temp_object.name) {
             temp_object['value'] = element[field.name]
             temp_object['status'] = element['status']
@@ -91,16 +92,16 @@ export class TablesComponent implements OnInit {
           }
           if (temp_object.custom) {
             if (temp_object.type == "button") {
-              var redirectUrl;
+              console.log("ele",element)
               if (temp_object.redirectTo && temp_object.redirectTo.includes(":")) {
-                var urlParam = temp_object.redirectTo.split(":")
+                let urlParam = temp_object.redirectTo.split(":")
+                console.log("urlParam",urlParam)
                 urlParam.forEach((paramVal, index) => {
                   if (paramVal in element) {
                     urlParam[index] = element[paramVal]
                   }
                 });
-                redirectUrl = urlParam.join("/").replace("//", "/")
-                temp_object.redirectTo = redirectUrl;
+                temp_object.redirectTo = urlParam.join("/").replace("//", "/");
               }
 
               // console.log("redirectUrl",redirectUrl)

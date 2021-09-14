@@ -338,12 +338,24 @@
                         "privacyConfig": "AffiliationOsConfig",
                         "fields": [
                             {
+                                "name": "instituteOSID",
+                                "custom": true,
+                                "element": {
+                                    "widget": {
+                                        "formlyConfig": {
+                                            "type": "input",
+                                            "templateOptions": { "type": "hidden" }
+                                        }
+                                    }
+                                }
+                            },
+                            {
                                 "name": "institute",
                                 "required": true,
                                 "type": "autocomplete",
                                 "api": "/Institute/search",
                                 "key": "instituteName",
-                                "value": "osid",
+                                "value": "instituteName",
                                 "autofill": {
                                     "apiURL": "https://ndear.xiv.in/registry/api/v1/Institute/search",
                                     "method": "POST",
@@ -356,31 +368,10 @@
                                                 "limit": 20,
                                                 "offset": 0
                                             },
-                                    "fields": [
+                                    "fields":[
                                         {
-                                            "address.plot": "taxpayerInfo.pradr.addr.flno"
-                                        },
-                                        {
-                                            "address.street": "taxpayerInfo.pradr.addr.st"
-                                        },
-                                        {
-                                            "address.landmark": "taxpayerInfo.pradr.addr.bnm"
-                                        },
-                                        {
-                                            "address.locality": "taxpayerInfo.pradr.addr.loc"
-                                        },
-                                        {
-                                            "address.state": "taxpayerInfo.pradr.addr.stcd"
-                                        },
-                                        {
-                                            "address.district": "taxpayerInfo.pradr.addr.dst"
-                                        },
-                                        {
-                                            "address.village": "taxpayerInfo.pradr.addr.city"
-                                        },
-                                        {
-                                            "address.pincode": "taxpayerInfo.pradr.addr.pncd"
-                                        }
+                                            "instituteOSID": "osid"
+                                        } 
                                     ]
                                 }
                             },
@@ -414,12 +405,16 @@
                         "privacyConfig": "AffiliationOsConfig",
                         "fields": [
                             {
+                                "name": "instituteOSID",
+                                "hidden": true
+                            },
+                            {
                                 "name": "instituteName",
                                 "required": true,
                                 "type": "autocomplete",
                                 "api": "/Institute/search",
                                 "key": "instituteName",
-                                "value": "osid",
+                                "value": "instituteName",
                                 "autofill": {
                                     "apiURL": "https://ndear.xiv.in/registry/api/v1/Institute/search",
                                     "method": "POST",
@@ -432,6 +427,11 @@
                                                 "limit": 20,
                                                 "offset": 0
                                             },
+                                    "fields":[
+                                        {
+                                            "instituteOSID": "osid"
+                                        } 
+                                    ],
                                     "dropdowns": [ 
                                         {
                                             "grades": "affiliation[0].classes"
@@ -649,12 +649,47 @@
                         "privacyConfig": "AffiliationOsConfig",
                         "fields": [
                             {
+                                "name": "instituteOSID",
+                                "custom": true,
+                                "element": {
+                                    "widget": {
+                                        "formlyConfig": {
+                                            "type": "input",
+                                            "templateOptions": { "type": "hidden" }
+                                        }
+                                    }
+                                }
+                            },
+                            {
                                 "name": "institute",
                                 "required": true,
                                 "type": "autocomplete",
                                 "api": "/Institute/search",
                                 "key": "instituteName",
-                                "value": "osid"
+                                "value": "instituteName",
+                                "autofill": {
+                                    "apiURL": "https://ndear.xiv.in/registry/api/v1/Institute/search",
+                                    "method": "POST",
+                                    "body": {
+                                                "filters": {
+                                                    "instituteName": {
+                                                        "contains": "{{value}}"
+                                                    }
+                                                },
+                                                "limit": 20,
+                                                "offset": 0
+                                            },
+                                    "fields":[
+                                        {
+                                            "instituteOSID": "osid"
+                                        } 
+                                    ],
+                                    "dropdowns": [ 
+                                        {
+                                            "class": "affiliation[0].classes"
+                                        }
+                                    ]
+                                }
                             },
                             {
                                 "name": "board",

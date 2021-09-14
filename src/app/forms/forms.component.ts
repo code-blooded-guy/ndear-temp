@@ -379,6 +379,10 @@ export class FormsComponent implements OnInit {
         if (field.class) {
           this.responseData.definitions[fieldset.definition].properties[field.name]['widget']['formlyConfig']['className'] = field.class;
         }
+        if (field.hidden) {
+          this.responseData.definitions[fieldset.definition].properties[field.name]['widget']['formlyConfig']['templateOptions']['type'] = "hidden";
+          delete this.responseData.definitions[fieldset.definition].properties[field.name]['title']
+        }
         if (field.required || field.children) {
           this.responseData.definitions[fieldset.definition].properties[field.name]['widget']['formlyConfig']['templateOptions']['required'] = field.required;
         }
@@ -463,13 +467,20 @@ export class FormsComponent implements OnInit {
                 });
               }
               else if (field.autofill.method === 'POST') {
+                console.log("contr",control.value)
                 var datapath = this.findPath(field.autofill.body, "{{value}}", '')
                 if (datapath) {
                   var dataobject = this.setPathValue(field.autofill.body, datapath, control.value)
                   this.generalService.postPrefillData(field.autofill.apiURL, dataobject).subscribe((res) => {
+                    if (Array.isArray(res)) {
+                      res = res[0]
+                    }
                     if (field.autofill.fields) {
                       field.autofill.fields.forEach(element => {
+                        console.log('1',element)
+
                         for (var [key1, value1] of Object.entries(element)) {
+                          console.log('2',key1, value1, res)
                           this.createPath(this.model, key1, this.ObjectbyString(res, value1))
                           this.form2.get(key1).setValue(this.ObjectbyString(res, value1))
                         }
@@ -478,9 +489,6 @@ export class FormsComponent implements OnInit {
                     if (field.autofill.dropdowns) {
                       field.autofill.dropdowns.forEach(element => {
                         for (var [key1, value1] of Object.entries(element)) {
-                          if (Array.isArray(res)) {
-                            res = res[0]
-                          }
                           this.schema["properties"][key1]['items']['enum'] = this.ObjectbyString(res, value1)
                         }
                       });
@@ -625,9 +633,9 @@ export class FormsComponent implements OnInit {
             this.model[fileField] = documents_list;
             console.log('documents', JSON.stringify(this.model[fileField]));
             if (this.type && this.type === 'entity') {
-              this.customFields.forEach(element => {
-                delete this.model[element];
-              });
+              // this.customFields.forEach(element => {
+              //   delete this.model[element];
+              // });
               if (this.identifier != null) {
                 this.updateData()
               } else {
@@ -647,9 +655,9 @@ export class FormsComponent implements OnInit {
               } else {
                 this.apiUrl = (url.join("/")) + '?send=false';
               }
-              this.customFields.forEach(element => {
-                delete this.model[element];
-              });
+              // this.customFields.forEach(element => {
+              //   delete this.model[element];
+              // });
               this.postData()
               // this.getData()
             }
@@ -660,9 +668,9 @@ export class FormsComponent implements OnInit {
         }
         else{
           if (this.type && this.type === 'entity') {
-            this.customFields.forEach(element => {
-              delete this.model[element];
-            });
+            // this.customFields.forEach(element => {
+            //   delete this.model[element];
+            // });
             if (this.identifier != null) {
               this.updateData()
             } else {
@@ -682,9 +690,9 @@ export class FormsComponent implements OnInit {
             } else {
               this.apiUrl = (url.join("/")) + '?send=false';
             }
-            this.customFields.forEach(element => {
-              delete this.model[element];
-            });
+            // this.customFields.forEach(element => {
+            //   delete this.model[element];
+            // });
             this.postData()
             // this.getData()
           }
@@ -693,9 +701,9 @@ export class FormsComponent implements OnInit {
     }
     else{
       if (this.type && this.type === 'entity') {
-        this.customFields.forEach(element => {
-          delete this.model[element];
-        });
+        // this.customFields.forEach(element => {
+        //   delete this.model[element];
+        // });
         if (this.identifier != null) {
           this.updateData()
         } else {
@@ -715,9 +723,9 @@ export class FormsComponent implements OnInit {
         } else {
           this.apiUrl = (url.join("/")) + '?send=false';
         }
-        this.customFields.forEach(element => {
-          delete this.model[element];
-        });
+        // this.customFields.forEach(element => {
+        //   delete this.model[element];
+        // });
         this.postData()
         // this.getData()
       }
@@ -803,6 +811,7 @@ export class FormsComponent implements OnInit {
     var a = s.split('.');
     for (var i = 0, n = a.length; i < n; ++i) {
       var k = a[i];
+      console.log('k',k,'o',o)
       if (k in o) {
         o = o[k];
       } else {
