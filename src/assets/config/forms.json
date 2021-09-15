@@ -267,7 +267,11 @@
                                         },
                                         {
                                             "name": "mobile",
-                                            "required": true
+                                            "required": true,
+                                            "validation": {
+                                                "pattern": "[6-9]{1}[0-9]{9}",
+                                                "message": "Mobile Number must be 10 digit number."
+                                            }
                                         }
                                     ]
                                 }
@@ -312,12 +316,7 @@
                                             "type": "date"
                                         },
                                         {
-                                            "name": "identityType",
-                                            "required": true
-                                        },
-                                        {
-                                            "name": "identityValue",
-                                            "required": true
+                                            "name": "identityHolder"
                                         }
                                     ]
                                 }
@@ -350,7 +349,7 @@
                                 }
                             },
                             {
-                                "name": "institute",
+                                "name": "instituteName",
                                 "required": true,
                                 "type": "autocomplete",
                                 "api": "/Institute/search",
@@ -578,7 +577,11 @@
                                         },
                                         {
                                             "name": "mobile",
-                                            "required": true
+                                            "required": true,
+                                            "validation": {
+                                                "pattern": "[6-9]{1}[0-9]{9}",
+                                                "message": "Mobile Number must be 10 digit number."
+                                            }
                                         }
                                     ]
                                 }
