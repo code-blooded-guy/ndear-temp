@@ -19,7 +19,11 @@
                             },
                             {
                                 "name": "email",
-                                "required": true
+                                "required": true,
+                                "validation": {
+                                    "pattern": "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z0-9.-]+$",
+                                    "message": "Email is not valid."
+                                }
                             }
                         ]
                     }
@@ -119,10 +123,16 @@
                             },
                             {
                                 "name": "establishmentYear",
-                                "required": true
+                                "required": true,
+                                "type": "number",
+                                "validation": {
+                                    "pattern": "^[12][0-9]{3}$",
+                                    "message": "Year is not valid"
+                                }
                             },
                             {
                                 "name": "contactNumber",
+                                "type": "number",
                                 "required": true
                             },
                             {
@@ -708,7 +718,7 @@
                             },
                             {
                                 "name": "documents",
-                                "format": "file",
+                                "format":"file",
                                 "multiple": true
                             },
                             {

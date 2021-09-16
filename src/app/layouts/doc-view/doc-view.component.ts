@@ -23,6 +23,7 @@ import { KeycloakService } from 'keycloak-angular';
 export class DocViewComponent implements OnInit {
   docUrl: string;
   baseUrl = environment.baseUrl;
+  extension;
   public bearerToken: string | undefined = undefined;
   constructor(private route: ActivatedRoute,
     private keycloakService: KeycloakService) { }
@@ -32,6 +33,7 @@ export class DocViewComponent implements OnInit {
       console.log("r",params)
       this.bearerToken = 'Bearer ' + this.keycloakService.getToken();
       this.docUrl = this.baseUrl +'/'+ params.u;
+      this.extension = params.u.split('.').slice(-1);
       console.log("d",this.docUrl)
     })
     

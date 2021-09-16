@@ -244,7 +244,8 @@ export class LayoutsComponent implements OnInit {
       }
       block.items.push(this.property)
       this.Data.push(block)
-      console.log("main",this.Data)
+      console.log("main",this.Data);
+      this.schemaloaded = true;
     });
   }
 
