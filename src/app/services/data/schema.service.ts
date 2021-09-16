@@ -48,6 +48,15 @@ export class SchemaService {
     return this.dataService.get(req);
   }
 
+  getSearchJSON() {
+    let url = "./assets/config/search.json";
+    const req = {
+      url: url
+    };
+
+    return this.dataService.get(req);
+  }
+
 
 }
 

@@ -48,6 +48,7 @@ import { EditPanelComponent } from './layouts/modal/panels/edit-panel/edit-panel
 import { AddPanelComponent } from './layouts/modal/panels/add-panel/add-panel.component';
 import { TablesComponent } from './tables/tables.component';
 import { DocViewComponent } from './layouts/doc-view/doc-view.component';
+  import { SearchComponent } from './discovery/search/search.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -91,13 +92,13 @@ const routes: Routes = [
   { path: 'board-search', component: BoardInstitutesComponent },
   { path: 'consent-auth', component: ConsentAuthorizeComponent },
 
-  { path: 'discovery', component: DiscoveryComponent },
+  { path: 'discovery-old', component: DiscoveryComponent },
   { path: 'login', component: KeycloakloginComponent ,  canActivate: [AuthGuard]},
 
   { path: 'teacher-attestation', component: TeacherAttestationComponent },
   { path: 'teacher-attestation-detail', component: TeacherAttestationDetailComponent },
   { path: 'form-detail', component: FormDetailComponent },
-
+  { path: 'discovery', component: SearchComponent },
 
 
   // Forms
