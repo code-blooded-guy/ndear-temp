@@ -62,6 +62,7 @@ import {AutocompleteLibModule} from 'angular-ng-autocomplete';
 import { FormDetailComponent } from '../app/tables/form-detail/form-detail/form-detail.component';
 
 import { MatMenuModule } from '@angular/material/menu';
+import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
 // formly
 import { FormlyModule, FormlyFieldConfig } from '@ngx-formly/core';
 import { FormlyBootstrapModule } from '@ngx-formly/bootstrap';
@@ -70,6 +71,8 @@ import { ObjectTypeComponent } from '../app/forms/types/object.type';
 import { MultiSchemaTypeComponent } from '../app/forms/types/multischema.type';
 import { NullTypeComponent } from '../app/forms/types/null.type';
 import { AutocompleteTypeComponent } from '../app/forms/types/autocomplete.type';
+import { FormlyFieldTabs } from '../app/discovery/search/types/tabs.type';
+import { FormlyFieldTabsetComponent } from '../app/discovery/search/types/tabset.type';
 
 export function minItemsValidationMessage(err, field: FormlyFieldConfig) {
   return `should NOT have fewer than ${field.templateOptions.minItems} items`;
@@ -140,7 +143,7 @@ import { FileValueAccessor } from './forms/types/file-value-accessor';
 import { CommonModule } from '@angular/common';
 import { DocViewComponent } from './layouts/doc-view/doc-view.component';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
-
+import { SearchComponent } from '../app/discovery/search/search.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -188,6 +191,7 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
     FormDetailComponent,
 
     FormsComponent,
+    SearchComponent,
     ArrayTypeComponent,
     ObjectTypeComponent,
     MultiSchemaTypeComponent,
@@ -200,7 +204,9 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
     AutocompleteTypeComponent,
     FileValueAccessor,
     FormlyFieldFile,
-    DocViewComponent
+    DocViewComponent,
+FormlyFieldTabs,
+    FormlyFieldTabsetComponent
     
 
 
@@ -222,7 +228,7 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
     KeycloakAngularModule,
     MatAutocompleteModule,
-
+    AngularMultiSelectModule,
     AutocompleteLibModule,
     FormlyBootstrapModule,
     MatMenuModule,
@@ -264,7 +270,16 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
           name: 'autocomplete',
           component: AutocompleteTypeComponent
         },
-        { name: 'file', component: FormlyFieldFile, wrappers: ['form-field'] }
+        { name: 'file', component: FormlyFieldFile, wrappers: ['form-field'] },
+,
+        {
+          name: 'tabs',
+          component: FormlyFieldTabs
+        },
+        {
+          name: 'tabset',
+          component: FormlyFieldTabsetComponent
+        }
       ],
     }),
 

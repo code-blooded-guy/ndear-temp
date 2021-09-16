@@ -258,3 +258,12 @@ formly-field {
         color: #aaa;
       }
   }
+
+.selected-list .c-list .c-token {
+    background-color: #6495ed99 !important;
+}
+
+.dropdown-list.tagToBody {
+    position: fixed;
+    width: 400px !important;
+}
