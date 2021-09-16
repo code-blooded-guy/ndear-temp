@@ -31,30 +31,27 @@
     </div>
   </div>
 
+  <form [formGroup]="form">
+    <formly-form [model]="model" [fields]="fieldsA" [options]="options" [form]="form"></formly-form>
+  </form>
+
   <div class="mt-4" *ngIf="items">
 
-    <!-- Search Result  -->
-    <div class="card p-4" this.cardFields *ngFor="let item of items | paginate: { itemsPerPage: limit, currentPage: page }">
-      <!-- {{item?.identityDetails?.fullName}} -->
-      <div *ngFor="let field of cardFields">
-        <div data-toggle="modal" data-target="#prewiewProfile" (click)="showDetails(item)">
-          <!-- {{item?[field.property]}} -->
-
-          <!-- {{field.property}} - {{item[field.property]}} -  -->
-          <div *ngIf="field?.type != 'object'">
-            <span> {{field?.title}} : </span>
-            <span class="fs-6"><b> {{item[field.property]}} </b> </span>
-          </div>
-
-          <div *ngIf="field?.type == 'object'">
-            {{field?.title}} :
-            <span class="fs-6" *ngFor="let n of item[field.property]">
-              <b> {{n[field.subProperty]}},</b>
-            </span>
+    <!-- Search Result -->
+     <div class="card p-4" this.cardFields *ngFor="let item of items | paginate: { itemsPerPage: limit, currentPage: page }">
+      <div *ngFor="let field of item.fields">
+        <div data-toggle="modal" data-target="#prewiewProfile" (click)="showDetails(item.data)">
+          <div *ngIf="field?.value">
+            <span *ngIf="field?.title"> {{field?.title}} : </span>
+            <span class="fs-6"><b>{{field?.value}} </b> </span>
           </div>
         </div>
-
       </div>
+    </div>
+
+     <!-- pagination-controls -->
+     <div class="my-1 float-end">
+      <pagination-controls (pageChange)="page = $event"></pagination-controls>
     </div>
 
     <!-- Data Not Found -->
@@ -77,10 +74,7 @@
       </div>
     </div>
 
-    <!-- pagination-controls -->
-    <div class="my-5 float-end">
-      <pagination-controls (pageChange)="page = $event"></pagination-controls>
-    </div>
+   
 
   </div>
 

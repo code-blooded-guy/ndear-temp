@@ -71,9 +71,6 @@ import { ObjectTypeComponent } from '../app/forms/types/object.type';
 import { MultiSchemaTypeComponent } from '../app/forms/types/multischema.type';
 import { NullTypeComponent } from '../app/forms/types/null.type';
 import { AutocompleteTypeComponent } from '../app/forms/types/autocomplete.type';
-import { FormlyFieldTabs } from '../app/discovery/search/types/tabs.type';
-import { FormlyFieldTabsetComponent } from '../app/discovery/search/types/tabset.type';
-
 export function minItemsValidationMessage(err, field: FormlyFieldConfig) {
   return `should NOT have fewer than ${field.templateOptions.minItems} items`;
 }
@@ -204,9 +201,7 @@ import { SearchComponent } from '../app/discovery/search/search.component';
     AutocompleteTypeComponent,
     FileValueAccessor,
     FormlyFieldFile,
-    DocViewComponent,
-FormlyFieldTabs,
-    FormlyFieldTabsetComponent
+    DocViewComponent
     
 
 
@@ -270,16 +265,7 @@ FormlyFieldTabs,
           name: 'autocomplete',
           component: AutocompleteTypeComponent
         },
-        { name: 'file', component: FormlyFieldFile, wrappers: ['form-field'] },
-,
-        {
-          name: 'tabs',
-          component: FormlyFieldTabs
-        },
-        {
-          name: 'tabset',
-          component: FormlyFieldTabsetComponent
-        }
+        { name: 'file', component: FormlyFieldFile, wrappers: ['form-field'] }
       ],
     }),
 
