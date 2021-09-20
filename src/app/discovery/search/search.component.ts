@@ -8,6 +8,9 @@ import { filter, isEmpty } from 'rxjs/operators';
 import { GeneralService } from '../../services/general/general.service';
 import data from 'src/app/data';
 import { ChangeDetectionStrategy } from '@angular/core';
+import { of } from 'rxjs';
+
+
 
 @Component({
   selector: 'app-search',
@@ -62,6 +65,7 @@ export class SearchComponent implements OnInit {
 
   page: number = 1;
   limit: number;
+  fieldsTemp = [];
 
   constructor(
     public schemaService: SchemaService,
@@ -112,21 +116,6 @@ export class SearchComponent implements OnInit {
 
         fieldset.filters.forEach((filter, index1) => {
 
-          if (filter.default) {
-
-            this.data[0].fieldGroup.push({
-              key: filter.key,
-              type: 'input',
-              className: 'col-6',
-              templateOptions: {
-                label: filter.title,
-              }
-            });
-
-            this.selectedItems.push({ "id": filter.key, "itemName": filter.title });
-
-          }
-
           let fieldObj = {
             key: filter.key,
             type: 'input',
@@ -136,9 +125,23 @@ export class SearchComponent implements OnInit {
             }
           }
 
+
+          /* if(filter.type == 'autocomplete')
+           {
+             fieldObj.type = 'autocomplete';
+             fieldObj.templateOptions['filter'] = (term) => of(term ? this.states.filter(state =>
+               state.toLowerCase().indexOf(term.toLowerCase()) > -1): this.states.slice())
+ 
+           }*/
+
           this.dropdownList.push({ "id": filter.key, "itemName": filter.title, "data": fieldObj });
 
+          if (filter.default) {
+            this.data[0].fieldGroup.push(fieldObj);
+            this.selectedItems.push({ "id": filter.key, "itemName": filter.title });
+          }
         });
+
         this.fields = [this.data[0]];
 
         fieldset.results.fields.forEach((fields) => {
@@ -163,7 +166,6 @@ export class SearchComponent implements OnInit {
     let _self = this;
 
     Object.keys(_self.model).forEach(function (key) {
-      console.log(key);
       _self.filtered.forEach((fieldset, index) => {
         if (_self.filtered[index].tab == _self.activeTabIs) {
 
@@ -182,15 +184,61 @@ export class SearchComponent implements OnInit {
 
 
     this.generalService.postData(this.apiUrl, this.searchString).subscribe((res) => {
-      this.items = res;
-      console.log(this.items);
+      // this.items = res;
+      this.mapFieldsdata(res);
       this.isLoading = false;
     }, (err) => {
     });
   }
 
+  mapFieldsdata(res) {
+
+    res.forEach((item, index) => {
+      this.fieldsTemp = [];
+
+          this.cardFields.forEach((key, i) => {
+           
+            var property = key.property;
+            var title = key.title;
+            var propertySplit = property.split(".");
+
+            let tempItem = [];
+            
+                    for (let j = 0; j < propertySplit.length; j++) {
+                      let a = propertySplit[j];
+
+                      if (j == 0 && item.hasOwnProperty(a)) {
+                        tempItem = item[a];
+                      } else if(tempItem.hasOwnProperty(a)){
+
+                        
+                          tempItem = tempItem[a];
+                        
+                      }else if(tempItem[0]){
+                        if(tempItem.length > 0){
+                          tempItem = tempItem[0][a];
+
+                        }else{
+                          tempItem = tempItem[a];
+                        }
+
+                      }else{
+                        tempItem = [];
+                      }
+                    }
+
+
+               this.fieldsTemp.push({ 'title' :  title , "value" : tempItem });
+
+          });
+
+          this.items.push({ 'fields' : this.fieldsTemp ,
+                          'data' : item})
+    });
+
+  }
+
   submit() {
-    console.log(this.model);
     this.searchData();
   }
 
@@ -211,7 +259,6 @@ export class SearchComponent implements OnInit {
   }
   OnItemDeSelect(item: any) {
     this.fields = [];
-    console.log(item);
     this.fields = this.data[0].fieldGroup.filter(function (obj) {
       return obj.key !== item.id;
     });
@@ -261,7 +308,7 @@ export class SearchComponent implements OnInit {
     this.user = [];
     this.user = item;
   }
-  
+
 
 
 }

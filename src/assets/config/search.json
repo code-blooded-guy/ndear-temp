@@ -66,8 +66,7 @@
                         {
 
                             "title" : "Affiliation Number", 
-                            "property" : "affiliation" ,
-                            "subProperty": "affiliationNumber",
+                            "property" : "affiliation.affiliationNumber" ,
                             "type" : "object" 
                         }
                     ]
@@ -137,12 +136,12 @@
                         {
 
                             "title" : "District", 
-                            "property" : "address.district"  
+                            "property" : "contactDetails.address.district"  
                         },
                         {
 
                             "title" : "State", 
-                            "property" : "address.state"  
+                            "property" : "contactDetails.address.state"  
                         }
                     ]
                 }
@@ -214,12 +213,12 @@
                         {
 
                             "title" : "District", 
-                            "property" : "address.district"  
+                            "property" : "contactDetails.address.district"  
                         },
                         {
 
                             "title" : "State", 
-                            "property" : "address.state"  
+                            "property" : "contactDetails.address.state"  
                         }
                     ]
                 }
