@@ -107,7 +107,7 @@
                     {
                         "definition": "Institute",
                         "privacyConfig": "InstituteOsConfig",
-                        "globalPrivacyConfig" : "public-access",
+                        "globalPrivacyConfig": "public-access",
                         "title": "Basic details",
                         "fields": [
                             {
@@ -119,12 +119,45 @@
                                 "validation": {
                                     "pattern": "^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$",
                                     "message": "GSTIN is not valid. Ex: 06BZAHM6385P6Z2"
+                                },
+                                "autofill": {
+                                    "apiURL": "https://appyflow.in/api/verifyGST?gstNo={{value}}&key_secret=XgTCGs0xmLgtBTCqj90sNOJEuL83",
+                                    "method": "GET",
+                                    "fields": [
+                                        {
+                                            "address.plot": "taxpayerInfo.pradr.addr.flno"
+                                        },
+                                        {
+                                            "address.street": "taxpayerInfo.pradr.addr.st"
+                                        },
+                                        {
+                                            "address.landmark": "taxpayerInfo.pradr.addr.bnm"
+                                        },
+                                        {
+                                            "address.locality": "taxpayerInfo.pradr.addr.loc"
+                                        },
+                                        {
+                                            "address.state": "taxpayerInfo.pradr.addr.stcd"
+                                        },
+                                        {
+                                            "address.district": "taxpayerInfo.pradr.addr.dst"
+                                        },
+                                        {
+                                            "address.village": "taxpayerInfo.pradr.addr.city"
+                                        },
+                                        {
+                                            "address.pincode": "taxpayerInfo.pradr.addr.pncd"
+                                        }
+                                    ]
                                 }
+                            },
+                            {
+                                "name": "address",
+                                "required": true
                             },
                             {
                                 "name": "establishmentYear",
                                 "required": true,
-                                "type": "number",
                                 "validation": {
                                     "pattern": "^[12][0-9]{3}$",
                                     "message": "Year is not valid"
@@ -301,7 +334,7 @@
                     {
                         "definition": "Teacher",
                         "privacyConfig": "TeacherOsConfig",
-                        "globalPrivacyConfig" : "internal-access",
+                        "globalPrivacyConfig": "internal-access",
                         "fields": [
                             {
                                 "name": "contactDetails"
@@ -353,7 +386,9 @@
                                     "widget": {
                                         "formlyConfig": {
                                             "type": "input",
-                                            "templateOptions": { "type": "hidden" }
+                                            "templateOptions": {
+                                                "type": "hidden"
+                                            }
                                         }
                                     }
                                 }
@@ -369,18 +404,18 @@
                                     "apiURL": "https://ndear.xiv.in/registry/api/v1/Institute/search",
                                     "method": "POST",
                                     "body": {
-                                                "filters": {
-                                                    "instituteName": {
-                                                        "contains": "{{value}}"
-                                                    }
-                                                },
-                                                "limit": 20,
-                                                "offset": 0
-                                            },
-                                    "fields":[
+                                        "filters": {
+                                            "instituteName": {
+                                                "contains": "{{value}}"
+                                            }
+                                        },
+                                        "limit": 20,
+                                        "offset": 0
+                                    },
+                                    "fields": [
                                         {
                                             "instituteOSID": "osid"
-                                        } 
+                                        }
                                     ]
                                 }
                             },
@@ -428,23 +463,23 @@
                                     "apiURL": "https://ndear.xiv.in/registry/api/v1/Institute/search",
                                     "method": "POST",
                                     "body": {
-                                                "filters": {
-                                                    "instituteName": {
-                                                        "contains": "{{value}}"
-                                                    }
-                                                },
-                                                "limit": 20,
-                                                "offset": 0
-                                            },
-                                    "fields":[
+                                        "filters": {
+                                            "instituteName": {
+                                                "contains": "{{value}}"
+                                            }
+                                        },
+                                        "limit": 20,
+                                        "offset": 0
+                                    },
+                                    "fields": [
                                         {
                                             "instituteOSID": "osid"
-                                        } 
+                                        }
                                     ],
-                                    "dropdowns": [ 
+                                    "dropdowns": [
                                         {
                                             "grades": "affiliation[0].classes"
-                                        } 
+                                        }
                                     ]
                                 }
                             },
@@ -611,7 +646,7 @@
                     {
                         "definition": "Student",
                         "privacyConfig": "StudentOsConfig",
-                        "globalPrivacyConfig" : "private-access",
+                        "globalPrivacyConfig": "private-access",
                         "fields": [
                             {
                                 "name": "contactDetails"
@@ -636,11 +671,7 @@
                                             "type": "date"
                                         },
                                         {
-                                            "name": "identityType",
-                                            "required": true
-                                        },
-                                        {
-                                            "name": "identityValue",
+                                            "name": "identityHolder",
                                             "required": true
                                         }
                                     ]
@@ -668,7 +699,9 @@
                                     "widget": {
                                         "formlyConfig": {
                                             "type": "input",
-                                            "templateOptions": { "type": "hidden" }
+                                            "templateOptions": {
+                                                "type": "hidden"
+                                            }
                                         }
                                     }
                                 }
@@ -684,20 +717,20 @@
                                     "apiURL": "https://ndear.xiv.in/registry/api/v1/Institute/search",
                                     "method": "POST",
                                     "body": {
-                                                "filters": {
-                                                    "instituteName": {
-                                                        "contains": "{{value}}"
-                                                    }
-                                                },
-                                                "limit": 20,
-                                                "offset": 0
-                                            },
-                                    "fields":[
+                                        "filters": {
+                                            "instituteName": {
+                                                "contains": "{{value}}"
+                                            }
+                                        },
+                                        "limit": 20,
+                                        "offset": 0
+                                    },
+                                    "fields": [
                                         {
                                             "instituteOSID": "osid"
-                                        } 
+                                        }
                                     ],
-                                    "dropdowns": [ 
+                                    "dropdowns": [
                                         {
                                             "class": "affiliation[0].classes"
                                         }
@@ -718,7 +751,7 @@
                             },
                             {
                                 "name": "documents",
-                                "format":"file",
+                                "format": "file",
                                 "multiple": true
                             },
                             {
