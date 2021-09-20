@@ -141,6 +141,7 @@ import { CommonModule } from '@angular/common';
 import { DocViewComponent } from './layouts/doc-view/doc-view.component';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { SearchComponent } from '../app/discovery/search/search.component';
+import { MatTabsModule } from '@angular/material/tabs';
 @NgModule({
   declarations: [
     AppComponent,
@@ -220,6 +221,7 @@ import { SearchComponent } from '../app/discovery/search/search.component';
     NgOtpInputModule,
     NgbModule,
     SuiModule,
+    MatTabsModule,
 
     KeycloakAngularModule,
     MatAutocompleteModule,
