@@ -379,6 +379,10 @@ export class FormsComponent implements OnInit {
         if (field.class) {
           this.responseData.definitions[fieldset.definition].properties[field.name]['widget']['formlyConfig']['className'] = field.class;
         }
+        if (field.enum) {
+          this.responseData.definitions[fieldset.definition].properties[field.name]['widget']['formlyConfig']['type'] = 'select';
+          this.responseData.definitions[fieldset.definition].properties[field.name]['widget']['formlyConfig']['templateOptions']['options'] = field.enum;
+        }
         if (field.hidden) {
           this.responseData.definitions[fieldset.definition].properties[field.name]['widget']['formlyConfig']['templateOptions']['type'] = "hidden";
           delete this.responseData.definitions[fieldset.definition].properties[field.name]['title']
@@ -530,6 +534,9 @@ export class FormsComponent implements OnInit {
             }
             return observableOf(this.searchResult);
           }
+        }
+        else if(field.type === 'multiselect'){
+          this.responseData.definitions[fieldset.definition].properties[field.name]['uniqueItems'] = true;
         }
         else {
           this.responseData.definitions[fieldset.definition].properties[field.name]['widget']['formlyConfig']['templateOptions']['type'] = field.type

@@ -227,7 +227,8 @@
                             },
                             {
                                 "name": "board",
-                                "required": true
+                                "required": true,
+                                "enum": [{"label": "CBSE Board", "value": "board-cbse"}]
                             },
                             {
                                 "name": "grantYear",
@@ -250,7 +251,8 @@
                             },
                             {
                                 "name": "classes",
-                                "required": true
+                                "required": true,
+                                "type": "multiselect"
                             },
                             {
                                 "name": "attest",
