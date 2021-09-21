@@ -141,6 +141,7 @@ import { CommonModule } from '@angular/common';
 import { DocViewComponent } from './layouts/doc-view/doc-view.component';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { SearchComponent } from '../app/discovery/search/search.component';
+import { FormlyFieldNgSelect } from './forms/types/multiselect.type';
 
 @NgModule({
   declarations: [
@@ -202,10 +203,8 @@ import { SearchComponent } from '../app/discovery/search/search.component';
     AutocompleteTypeComponent,
     FileValueAccessor,
     FormlyFieldFile,
-    DocViewComponent
-    
-
-
+    DocViewComponent,
+    FormlyFieldNgSelect
   ],
   imports: [
     BrowserModule,
@@ -265,7 +264,8 @@ import { SearchComponent } from '../app/discovery/search/search.component';
           name: 'autocomplete',
           component: AutocompleteTypeComponent
         },
-        { name: 'file', component: FormlyFieldFile, wrappers: ['form-field'] }
+        { name: 'file', component: FormlyFieldFile, wrappers: ['form-field'] },
+        { name: 'multiselect', component: FormlyFieldNgSelect }
       ],
     }),
 

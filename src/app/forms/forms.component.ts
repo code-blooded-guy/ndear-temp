@@ -536,10 +536,17 @@ export class FormsComponent implements OnInit {
           }
         }
         else if(field.type === 'multiselect'){
-          this.responseData.definitions[fieldset.definition].properties[field.name]['uniqueItems'] = true;
+          this.responseData.definitions[fieldset.definition].properties[field.name]['widget']['formlyConfig']['type'] = field.type;
+          this.responseData.definitions[fieldset.definition].properties[field.name]['widget']['formlyConfig']['templateOptions']['multiple'] = true;
+          this.responseData.definitions[fieldset.definition].properties[field.name]['widget']['formlyConfig']['templateOptions']['placeholder'] = "Select " + field.name;
+          this.responseData.definitions[fieldset.definition].properties[field.name]['widget']['formlyConfig']['templateOptions']['options'] = [];
+          // console.log("this.responseData.definitions[fieldset.definition].properties[field.name]",this.responseData.definitions[fieldset.definition].properties[field.name]['items']['enum'])
+          this.responseData.definitions[fieldset.definition].properties[field.name]['items']['enum'].forEach(enumval => {
+            this.responseData.definitions[fieldset.definition].properties[field.name]['widget']['formlyConfig']['templateOptions']['options'].push({ label: enumval, value: enumval })
+          });
         }
         else {
-          this.responseData.definitions[fieldset.definition].properties[field.name]['widget']['formlyConfig']['templateOptions']['type'] = field.type
+          this.responseData.definitions[fieldset.definition].properties[field.name]['widget']['formlyConfig']['templateOptions']['type'] = field.type;
         }
       }
       if (field.disabled || field.disable) {
