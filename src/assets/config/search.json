@@ -16,17 +16,17 @@
                         "key": "board",
                         "type": "text",
                         "title": "Board",
-                        "default": true,
-                        "marked": "public",
                         "propertyPath": "affiliation.board"
                     },
                     {
                         "key": "instituteName",
-                        "type": "text",
+                        "type": "autocomplete",
                         "title": "Institute Name",
                         "default": true,
                         "defaultValue": "any",
-                        "propertyPath": "instituteName"
+                        "propertyPath": "instituteName",
+                        "api": "/Institute/search",
+                        "placeholder" : "Enter Institute name"
                     },
                     {
                         "key": "state",
@@ -67,7 +67,12 @@
 
                             "title" : "Affiliation Number", 
                             "property" : "affiliation.affiliationNumber" ,
-                            "type" : "object" 
+                            "attest" : "_osState"
+                        },
+                        {
+
+                            "title" : "Affiliation Classes", 
+                            "property" : "affiliation.classes" 
                         }
                     ]
                 }
