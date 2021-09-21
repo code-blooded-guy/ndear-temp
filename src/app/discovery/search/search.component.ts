@@ -8,9 +8,7 @@ import { filter, isEmpty } from 'rxjs/operators';
 import { GeneralService } from '../../services/general/general.service';
 import data from 'src/app/data';
 import { ChangeDetectionStrategy } from '@angular/core';
-import { of } from 'rxjs';
-
-
+import { of as observableOf } from 'rxjs';
 
 @Component({
   selector: 'app-search',
@@ -41,15 +39,16 @@ export class SearchComponent implements OnInit {
   items = [];
   apiUrl: any;
   user: any;
-
+  searchResult: any;
   dropdownList = [];
   selectedItems = [];
   dropdownSettings = {
     singleSelection: false,
     text: "Select filter",
     selectAllText: 'Select All',
-    unSelectAllText: 'UnSelect All',
+    unSelectAllText: 'Unselect All',
     enableSearchFilter: true,
+    noDataLabel: 'Filter Not Available',
     classes: "myclass custom-class"
   };
   searchFields = {
@@ -126,13 +125,40 @@ export class SearchComponent implements OnInit {
           }
 
 
-          /* if(filter.type == 'autocomplete')
-           {
-             fieldObj.type = 'autocomplete';
-             fieldObj.templateOptions['filter'] = (term) => of(term ? this.states.filter(state =>
-               state.toLowerCase().indexOf(term.toLowerCase()) > -1): this.states.slice())
- 
-           }*/
+             if(filter.type == 'autocomplete')
+             {
+               fieldObj.type = 'autocomplete';
+   
+  
+               fieldObj['templateOptions']['label'] = filter.title;
+               fieldObj['templateOptions']['placeholder'] = filter.placeholder;
+  
+  
+               fieldObj['templateOptions']['search$'] = (term) => {
+              if (term || term != '') {
+                var formData = {
+                  "filters": {},
+                  "limit": 20,
+                  "offset": 0
+                }
+  
+                formData.filters[filter.key] = {};
+                formData.filters[filter.key]["contains"] = term;
+  
+                this.generalService.postData(filter.api, formData).subscribe(async (res) => {
+                  let items = res;
+                  items = items.filter(x => x[filter.key].toLocaleLowerCase().indexOf(term.toLocaleLowerCase()) > -1);
+                  if (items) {
+                    this.searchResult = items;
+                    return observableOf(this.searchResult);
+                  }
+                });
+             }
+  
+             return observableOf(this.searchResult);
+  
+            }
+          } 
 
           this.dropdownList.push({ "id": filter.key, "itemName": filter.title, "data": fieldObj });
 
@@ -151,8 +177,6 @@ export class SearchComponent implements OnInit {
     });
 
     this.searchData();
-
-
   }
 
   searchData() {
@@ -173,7 +197,7 @@ export class SearchComponent implements OnInit {
 
             if (key == filter.key) {
               _self.searchString.filters[filter.propertyPath] = {
-                "startsWith": _self.model[key]
+                "startsWith": (_self.model[key]) ? _self.model[key] : ''
               };
             }
           });
@@ -184,56 +208,63 @@ export class SearchComponent implements OnInit {
 
 
     this.generalService.postData(this.apiUrl, this.searchString).subscribe((res) => {
-      // this.items = res;
       this.mapFieldsdata(res);
       this.isLoading = false;
     }, (err) => {
     });
   }
 
-  mapFieldsdata(res) {
+  async mapFieldsdata(res) {
+    this.items = [];
 
-    res.forEach((item, index) => {
+
+    await res.forEach((item, index) => {
       this.fieldsTemp = [];
 
-          this.cardFields.forEach((key, i) => {
-           
-            var property = key.property;
-            var title = key.title;
-            var propertySplit = property.split(".");
+      this.cardFields.forEach((key, i) => {
 
-            let tempItem = [];
-            
-                    for (let j = 0; j < propertySplit.length; j++) {
-                      let a = propertySplit[j];
+        var property = key.property;
+        var title = key.title;
+        var propertySplit = property.split(".");
 
-                      if (j == 0 && item.hasOwnProperty(a)) {
-                        tempItem = item[a];
-                      } else if(tempItem.hasOwnProperty(a)){
+        let fieldValue = [];
 
-                        
-                          tempItem = tempItem[a];
-                        
-                      }else if(tempItem[0]){
-                        if(tempItem.length > 0){
-                          tempItem = tempItem[0][a];
+        for (let j = 0; j < propertySplit.length; j++) {
+          let a = propertySplit[j];
 
-                        }else{
-                          tempItem = tempItem[a];
-                        }
+          if (j == 0 && item.hasOwnProperty(a)) {
+            fieldValue = item[a];
+          } else if (fieldValue.hasOwnProperty(a)) {
 
-                      }else{
-                        tempItem = [];
-                      }
-                    }
+            fieldValue = fieldValue[a];
+
+          } else if (fieldValue[0]) {
+            let arryItem = []
+            if (fieldValue.length > 0) {
+              for (let i = 0; i < fieldValue.length; i++) {
+                arryItem.push({ 'value': fieldValue[i][a], "status": fieldValue[i][key.attest] });
+              }
+
+              fieldValue = arryItem;
+
+            } else {
+              fieldValue = fieldValue[a];
+            }
+
+          } else {
+            fieldValue = [];
+          }
+        }
 
 
-               this.fieldsTemp.push({ 'title' :  title , "value" : tempItem });
+        this.fieldsTemp.push({ 'title': title, "value": fieldValue });
 
-          });
+      });
+      this.items.push({
+        'fields': this.fieldsTemp,
+        'data': item
+      });
 
-          this.items.push({ 'fields' : this.fieldsTemp ,
-                          'data' : item})
     });
 
   }
@@ -280,7 +311,6 @@ export class SearchComponent implements OnInit {
 
   searchInstituteData(event) {
     let apiUrl;
-    // let filterData = this.searchData(event);
   }
 
 
@@ -309,6 +339,9 @@ export class SearchComponent implements OnInit {
     this.user = item;
   }
 
+  typeOf(value) {
+    return typeof value;
+  }
 
 
 }
