@@ -503,10 +503,12 @@
                                 "required": true
                             },
                             {
-                                "name": "subjects"
+                                "name": "subjects",
+                                "type": "multiselect"
                             },
                             {
-                                "name": "grades"
+                                "name": "grades",
+                                "type": "multiselect"
                             },
                             {
                                 "name": "attest",
@@ -741,7 +743,8 @@
                             },
                             {
                                 "name": "board",
-                                "required": true
+                                "required": true,
+                                "enum": [{"label": "CBSE Board", "value": "board-cbse"}]
                             },
                             {
                                 "name": "medium",
