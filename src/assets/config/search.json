@@ -9,7 +9,6 @@
                 "tab": "institute",
                 "tabTitle": "Search Institute",
                 "api": "/Institute/search",
-                "header": "main",
                 "activeTab": "active",
                 "filters": [
                     {
@@ -23,7 +22,6 @@
                         "type": "autocomplete",
                         "title": "Institute Name",
                         "default": true,
-                        "defaultValue": "any",
                         "propertyPath": "instituteName",
                         "api": "/Institute/search",
                         "placeholder" : "Enter Institute name"
@@ -68,11 +66,6 @@
                             "title" : "Affiliation Number", 
                             "property" : "affiliation.affiliationNumber" ,
                             "attest" : "_osState"
-                        },
-                        {
-
-                            "title" : "Affiliation Classes", 
-                            "property" : "affiliation.classes" 
                         }
                     ]
                 }
@@ -83,7 +76,6 @@
                 "tab": "teacher",
                 "tabTitle": "Search Teacher",
                 "api": "/Teacher/search",
-                "header": "main",
                 "filters": [
                     {
                         "key": "board",
@@ -131,12 +123,12 @@
                         {
 
                             "title" : "Qualification", 
-                            "property" : "qualification"  
+                            "property" : "academicQualifications.qualification"  
                         },
                         {
 
                             "title" : "Subject", 
-                            "property" : "subject"  
+                            "property" : "experience.subjects"  
                         },
                         {
 
@@ -157,7 +149,6 @@
                 "tab": "student",
                 "tabTitle": "Search Student",
                 "api": "/Student/search",
-                "header": "main",
                 "filters": [
                     {
                         "key": "board",
@@ -229,19 +220,5 @@
                 }
             }
         }
-    ],
-    "conditions": {
-        "text": [
-            "is",
-            "is not",
-            "any"
-        ],
-        "date": [
-            "is",
-            ">=",
-            "<=",
-            "between",
-            "any"
-        ]
-    }
+    ]
 }

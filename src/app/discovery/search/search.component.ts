@@ -128,8 +128,6 @@ export class SearchComponent implements OnInit {
              if(filter.type == 'autocomplete')
              {
                fieldObj.type = 'autocomplete';
-   
-  
                fieldObj['templateOptions']['label'] = filter.title;
                fieldObj['templateOptions']['placeholder'] = filter.placeholder;
   
@@ -196,9 +194,11 @@ export class SearchComponent implements OnInit {
           fieldset.filters.forEach((filter) => {
 
             if (key == filter.key) {
+              if(_self.model[key]){
               _self.searchString.filters[filter.propertyPath] = {
-                "startsWith": (_self.model[key]) ? _self.model[key] : ''
+                "startsWith": _self.model[key] 
               };
+            }
             }
           });
         }
@@ -270,6 +270,7 @@ export class SearchComponent implements OnInit {
   }
 
   submit() {
+    this.page = 1;
     this.searchData();
   }
 
@@ -297,6 +298,7 @@ export class SearchComponent implements OnInit {
   }
 
   onSelectAll(items: any) {
+    this.data[0].fieldGroup = [];
     for (let i = 0; i < items.length; i++) {
       this.data[0].fieldGroup.push(items[i].data);
     }
@@ -322,7 +324,8 @@ export class SearchComponent implements OnInit {
     this.dropdownList = [];
     this.selectedItems = [];
     this.items = [];
-
+    this.model = {};
+    this.page = 1;
     this.activeTabIs = activeTabIs;
 
     this.filtered.forEach((fieldset, index) => {
