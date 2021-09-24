@@ -259,6 +259,7 @@ formly-field {
       }
   }
 
+// discovery page
 .selected-list .c-list .c-token {
     background-color: #6495ed99 !important;
 }
@@ -266,4 +267,9 @@ formly-field {
 .dropdown-list.tagToBody {
     position: fixed;
     width: 400px !important;
+}
+
+.list-area {
+    background: #fbfbfb;
+    color: black !important;
 }
