@@ -23,7 +23,7 @@
                         "title": "Affiliation details",
                         "add": true,
                         "addform":"affiliation",
-                        "edit": false,
+                        "claimEdit": true,
                         "editform":"affiliation",
                         "multiple": true,
                         "fields": {
@@ -54,7 +54,8 @@
                         "title": "Experience details",
                         "add": true,
                         "addform":"teacher-experience",
-                        "edit": false,
+                        "editform":"teacher-experience",
+                        "claimEdit": true,
                         "multiple": true,
                         "fields": {
                             "includes": ["experience"]
@@ -65,7 +66,8 @@
                         "title": "Academic Qualifications",
                         "add": true,
                         "addform":"teacher-education",
-                        "edit": false,
+                        "editform":"teacher-education",
+                        "claimEdit": true,
                         "multiple": true,
                         "fields": {
                             "includes": ["academicQualifications"]
@@ -95,7 +97,9 @@
                         "title": "Education details",
                         "add": true,
                         "addform":"student-education",
+                        "editform":"student-education",
                         "edit": false,
+                        "claimEdit": true,
                         "multiple": true,
                         "fields": {
                             "includes": ["educationDetails"]

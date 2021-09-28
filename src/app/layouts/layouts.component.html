@@ -54,9 +54,13 @@
                                                 <img *ngIf="element[objectIndex]._osState == 'DRAFT'" style="width: 16px;"
                                                     src="https://i.pinimg.com/originals/1e/a6/69/1ea669fd320895bb475da1b222b86d92.png"
                                                     data-mdb-toggle="tooltip" title="Saved to DRAFT" />
-                                                <!-- <a panelEditLink="{{block.editform}}" identity="{{element[objectIndex].osid}}" class="pl-1 fs-7 text-primary-color">edit <i
-                                                    class="fa fa-pencil pr-1" aria-hidden="true"></i></a> -->
-                                            </ng-template>
+                                              </ng-template>
+						<span *ngIf="element[objectIndex]._osState != 'PUBLISHED'">
+                                                <a *ngIf="!public && block.claimEdit"
+                                                    panelEditLink="{{block.editform}}/{{element[objectIndex].osid}}"
+                                                    class="pl-1 fs-7 text-primary-color float-end">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                            </span>
                                         </h6>
                                         <ng-template #smallBlock>
                                             <div *ngIf="objectIndex + 1 != element.length; else greyBlock"

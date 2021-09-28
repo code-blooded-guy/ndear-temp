@@ -41,7 +41,7 @@ export class FormsComponent implements OnInit {
   property = {};
   ordering;
   required = [];
-
+  entityId: string;
   form2: FormGroup;
   model = {};
   options: FormlyFormOptions;
@@ -61,6 +61,9 @@ export class FormsComponent implements OnInit {
   searchResult: any[];
   states: any[] = [];
   fileFields: any[] = [];
+  propertyName: string;
+  notes: any;
+
   constructor(private route: ActivatedRoute,
     public toastMsg: ToastMessageService, public router: Router, public schemaService: SchemaService, private formlyJsonschema: FormlyJsonschema, public generalService: GeneralService, private location: Location) { }
 
@@ -69,8 +72,10 @@ export class FormsComponent implements OnInit {
       this.add = this.router.url.includes('add');
 
       if (params['form'] != undefined) {
-        this.form = params['form']
+        this.form = params['form'].split('/', 1)[0];
+        this.identifier = params['form'].split('/', 2)[1];
       }
+
       if (params['id'] != undefined) {
         this.identifier = params['id']
       }
@@ -89,6 +94,7 @@ export class FormsComponent implements OnInit {
       if (this.formSchema.api) {
         this.apiUrl = this.formSchema.api;
       }
+
       if (this.formSchema.header) {
         this.header = this.formSchema.header
       }
@@ -98,14 +104,20 @@ export class FormsComponent implements OnInit {
       // if (this.identifier != null) {
       //   this.getData()
       // }
+
       if (this.formSchema.type) {
         this.type = this.formSchema.type
+      }
+
+      if (this.type != 'entity') {
+        this.propertyName = this.type.split(":")[1];
+        this.getEntityData( this.apiUrl); 
       }
 
       this.schemaService.getSchemas().subscribe((res) => {
         this.responseData = res;
         this.formSchema.fieldsets.forEach(fieldset => {
-          console.log('fieldset',fieldset)
+
           if (fieldset.hasOwnProperty('globalPrivacyConfig') && fieldset.globalPrivacyConfig != '') {
             this.globalPrivacy = fieldset.globalPrivacyConfig;
           } else
@@ -114,7 +126,7 @@ export class FormsComponent implements OnInit {
               this.privateFields = (this.responseData.definitions[fieldset.privacyConfig].hasOwnProperty('privateFields') ? this.responseData.definitions[fieldset.privacyConfig].privateFields : []);
               this.internalFields = (this.responseData.definitions[fieldset.privacyConfig].hasOwnProperty('internalFields') ? this.responseData.definitions[fieldset.privacyConfig].internalFields : []);
             }
-          this.getData(fieldset.definition);
+          this.getData();
 
           this.definations[fieldset.definition] = {}
           this.definations[fieldset.definition]['type'] = "object";
@@ -160,7 +172,6 @@ export class FormsComponent implements OnInit {
         this.schema["properties"] = this.property;
         this.schema["required"] = this.required;
         this.schema["dependencies"] = this.dependencies;
-        console.log("Schema: " + JSON.stringify(this.schema));
         this.loadSchema();
       },
         (error) => {
@@ -321,14 +332,14 @@ export class FormsComponent implements OnInit {
   }
 
   addLockIcon(responseData) {
-    if (responseData.access == 'private') {
+    if (responseData.access == 'private' && responseData.widget.formlyConfig.templateOptions['type'] != "hidden") {
       responseData.widget.formlyConfig.templateOptions = {
         addonRight: {
           text: 'Only by consent',
           class: "private-access"
         }
       }
-    } else if (responseData.access == 'internal') {
+    } else if (responseData.access == 'internal' && responseData.widget.formlyConfig.templateOptions['type'] != "hidden") {
       responseData.widget.formlyConfig.templateOptions = {
 
         addonRight: {
@@ -353,21 +364,9 @@ export class FormsComponent implements OnInit {
             },
             "validation": {},
             "expressionProperties": {},
-            "modelOptions":{}
+            "modelOptions": {}
           }
 
-        }
-
-        if (this.privacyCheck) {
-          this.responseData.definitions[fieldset.definition].properties[field.name]['widget']['formlyConfig']['templateOptions'] = {
-            addonRight: {
-              text: 'Anyone',
-              class: "public-access"
-            },
-            attributes: {
-              style: "width: 90%;"
-            },
-          }
         }
 
         if (field.classGroup) {
@@ -423,6 +422,15 @@ export class FormsComponent implements OnInit {
           //   });
           // }
         }
+        
+        if (this.privacyCheck && this.responseData.definitions[fieldset.definition].properties[field.name]['widget']['formlyConfig']['templateOptions']['type'] != "hidden") {
+          this.responseData.definitions[fieldset.definition].properties[field.name]['widget']['formlyConfig']['templateOptions'] = {
+            addonRight: {
+              text: 'Anyone',
+              class: "public-access"
+            }
+          }
+        }
 
         if (field.validation) {
           if (field.validation.message) {
@@ -438,7 +446,6 @@ export class FormsComponent implements OnInit {
         }
       }
       if (field.autofill) {
-        console.log('f',field.name)
         if (field.autofill.apiURL) {
           this.responseData.definitions[fieldset.definition].properties[field.name]['widget']['formlyConfig']['modelOptions'] = {
             updateOn: 'blur'
@@ -471,7 +478,6 @@ export class FormsComponent implements OnInit {
                 });
               }
               else if (field.autofill.method === 'POST') {
-                console.log("contr",control.value)
                 var datapath = this.findPath(field.autofill.body, "{{value}}", '')
                 if (datapath) {
                   var dataobject = this.setPathValue(field.autofill.body, datapath, control.value)
@@ -481,10 +487,8 @@ export class FormsComponent implements OnInit {
                     }
                     if (field.autofill.fields) {
                       field.autofill.fields.forEach(element => {
-                        console.log('1',element)
 
                         for (var [key1, value1] of Object.entries(element)) {
-                          console.log('2',key1, value1, res)
                           this.createPath(this.model, key1, this.ObjectbyString(res, value1))
                           this.form2.get(key1).setValue(this.ObjectbyString(res, value1))
                         }
@@ -622,18 +626,16 @@ export class FormsComponent implements OnInit {
       this.fileFields.forEach(fileField => {
         if(this.model[fileField]){
           var formData = new FormData();
-          console.log("Model -- ",this.model[fileField]);
           for (let i = 0; i < this.model[fileField].length; i++) {
             const file = this.model[fileField][i]
             formData.append("files", file);
           }
-          
+
           if (this.type && this.type.includes("property")) {
             var property = this.type.split(":")[1];
           }
           var url = [this.apiUrl, this.identifier, property, 'documents']
           this.generalService.postData(url.join('/'), formData).subscribe((res) => {
-            console.log('res', res);
             var documents_list: any[] = [];
             var documents_obj = {
               "fileName": "",
@@ -643,9 +645,8 @@ export class FormsComponent implements OnInit {
               documents_obj.fileName = element;
               documents_list.push(documents_obj);
             });
-            
+
             this.model[fileField] = documents_list;
-            console.log('documents', JSON.stringify(this.model[fileField]));
             if (this.type && this.type === 'entity') {
               // this.customFields.forEach(element => {
               //   delete this.model[element];
@@ -694,7 +695,13 @@ export class FormsComponent implements OnInit {
           }
           else if (this.type && this.type.includes("property")) {
             var property = this.type.split(":")[1];
-            var url = [this.apiUrl, this.identifier, property];
+           
+            if (this.identifier != null  && this.entityId != undefined) {
+              var url = [this.apiUrl, this.entityId, property, this.identifier];
+            } else {
+              var url = [this.apiUrl, this.identifier, property];
+            }
+
             this.apiUrl = (url.join("/"));
             if (this.model[property]) {
               this.model = this.model[property];
@@ -704,11 +711,13 @@ export class FormsComponent implements OnInit {
             } else {
               this.apiUrl = (url.join("/")) + '?send=false';
             }
-            // this.customFields.forEach(element => {
-            //   delete this.model[element];
-            // });
-            this.postData()
-            // this.getData()
+
+            if (this.identifier != null && this.entityId != undefined) {
+              this.updateClaims()
+            } else {
+              this.postData()
+            }
+
           }
         }
       });
@@ -727,7 +736,13 @@ export class FormsComponent implements OnInit {
       }
       else if (this.type && this.type.includes("property")) {
         var property = this.type.split(":")[1];
-        var url = [this.apiUrl, this.identifier, property];
+
+        if (this.identifier != null && this.entityId != undefined) {
+          var url = [this.apiUrl, this.entityId, property, this.identifier];
+        } else {
+          var url = [this.apiUrl, this.identifier, property];
+        }
+
         this.apiUrl = (url.join("/"));
         if (this.model[property]) {
           this.model = this.model[property];
@@ -740,12 +755,18 @@ export class FormsComponent implements OnInit {
         // this.customFields.forEach(element => {
         //   delete this.model[element];
         // });
-        this.postData()
+
+        if (this.identifier != null && this.entityId != undefined) {
+          this.updateClaims()
+        } else {
+          this.postData()
+        }
+
         // this.getData()
       }
     }
 
-    
+
     // const url = this.router.createUrlTree(['/profile/institute'])
     // window.open(this.router.createUrlTree([this.redirectTo]).toString(), '_blank')
   }
@@ -773,17 +794,30 @@ export class FormsComponent implements OnInit {
     }
   }
 
-  getData(definition) {
+  async getNotes(claimId) {
+    await this.generalService.getData("/Teacher/claims/" + claimId).subscribe((res) => {
+      console.log("res", res)
+      this.notes = res.notes;
+    })
+  }
+
+
+  getData() {
     var get_url;
     if (this.identifier) {
-      get_url = this.apiUrl + '/' + this.identifier
+      get_url = '/' + this.propertyName + '/' + this.identifier;
     } else {
       get_url = this.apiUrl
     }
     this.generalService.getData(get_url).subscribe((res) => {
       // if(this.property[definition])
-      this.model = res[0];
-      this.identifier = res[0].osid;
+      res = (res[0]) ? res[0] : res;
+      if (this.propertyName && this.entityId) {
+        this.getNotes(res._osClaimId);
+      }
+
+      this.model = res;
+      this.identifier = res.osid;
       this.loadSchema()
     });
   }
@@ -825,7 +859,6 @@ export class FormsComponent implements OnInit {
     var a = s.split('.');
     for (var i = 0, n = a.length; i < n; ++i) {
       var k = a[i];
-      console.log('k',k,'o',o)
       if (k in o) {
         o = o[k];
       } else {
@@ -893,6 +926,28 @@ export class FormsComponent implements OnInit {
     }
     propertyParent[propertyName] = value;
     return obj;
+  }
+
+  getEntityData(apiUrl) {
+    if(this.identifier !== undefined){
+      this.generalService.getData(apiUrl).subscribe((res) => {
+        this.entityId = res[0].osid;
+      });
+    }
+ 
+  }
+
+  updateClaims(){
+    this.generalService.updateclaims(this.apiUrl, this.model).subscribe((res) => {
+      if (res.params.status == 'SUCCESSFUL') {
+        this.router.navigate([this.redirectTo])
+      }
+      else if (res.params.errmsg != '' && res.params.status == 'UNSUCCESSFUL') {
+        this.toastMsg.error('error', res.params.errmsg)
+      }
+    }, (err) => {
+      this.toastMsg.error('error', err.error.params.errmsg)
+    });
   }
 
 }
