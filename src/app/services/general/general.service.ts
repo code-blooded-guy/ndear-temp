@@ -71,6 +71,15 @@ export class GeneralService {
     return this.dataService.put(req);
   }
 
+  updateclaims(apiUrl, data) {
+    let url = `${this.baseUrl}${apiUrl}`;
+    const req = {
+      url: url,
+      data: data
+    };
+    return this.dataService.put(req);
+  }
+
 
 }
 
